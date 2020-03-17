@@ -1,5 +1,6 @@
 include ':app'
+project(':app').projectDir = new File(settingsDir, '../app')
 
-include ':AotuPoint'
-project(':AotuPoint').projectDir = new File(settingsDir, '../AotuPoint')
+include ':AutoPoint'
+project(':AutoPoint').projectDir = new File(settingsDir, '../AutoPoint')
 

@@ -1,14 +1,23 @@
-package com.mob.buryingpoint.core;
+package com.mob.auto.core;
 
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.view.ViewGroup;
+
+import com.mob.auto.utils.Log;
 
 public class PointLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
+	private PointLayoutListener layoutListener;
+
+	public PointLifecycleCallbacks(){
+		layoutListener = new PointLayoutListener();
+	}
+
 	@Override
 	public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-		activity.findViewById(android.R.id.content);
+
 	}
 
 	@Override
@@ -18,7 +27,15 @@ public class PointLifecycleCallbacks implements Application.ActivityLifecycleCal
 
 	@Override
 	public void onActivityResumed(Activity activity) {
+		Log.show("Activity Class Name：" + activity.getClass().getName());
+		ViewHelper.doIt(activity);
 
+		if(activity.getWindow() != null && activity.getWindow().getDecorView() != null
+				&& activity.getWindow().getDecorView() instanceof ViewGroup) {
+			ViewGroup viewGroup = (ViewGroup) activity.getWindow().getDecorView();
+			layoutListener.setRootView(viewGroup);
+			viewGroup.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
+		}
 	}
 
 	@Override

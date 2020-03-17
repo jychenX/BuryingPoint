@@ -2,7 +2,7 @@ package com.mob.buryingpoint.application;
 
 import android.app.Application;
 
-import com.mob.buryingpoint.core.PointLifecycleCallbacks;
+import com.mob.auto.core.PointLifecycleCallbacks;
 
 public class MyApplication extends Application {
 
