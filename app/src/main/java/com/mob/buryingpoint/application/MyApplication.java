@@ -1,6 +1,8 @@
 package com.mob.buryingpoint.application;
 
 import android.app.Application;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.mob.auto.core.PointLifecycleCallbacks;
 

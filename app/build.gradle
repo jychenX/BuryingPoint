@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.mob.sdk'
+
+MobSDK{}
 
 android {
     compileSdkVersion 29
