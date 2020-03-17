@@ -1,0 +1,21 @@
+apply plugin: 'com.android.library'
+
+android{
+	compileSdkVersion 28
+
+	defaultConfig {
+		targetSdkVersion 28
+		minSdkVersion 16
+	}
+
+	buildTypes {
+		debug {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
+}
