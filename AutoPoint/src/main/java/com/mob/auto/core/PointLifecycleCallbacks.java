@@ -9,10 +9,10 @@ import com.mob.auto.utils.Log;
 
 public class PointLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
-	private PointLayoutListener layoutListener;
+	private InterceptTaskManager interceptTaskManager;
 
 	public PointLifecycleCallbacks(){
-		layoutListener = new PointLayoutListener();
+		interceptTaskManager = new InterceptTaskManager();
 	}
 
 	@Override
@@ -27,14 +27,8 @@ public class PointLifecycleCallbacks implements Application.ActivityLifecycleCal
 
 	@Override
 	public void onActivityResumed(Activity activity) {
-		Log.show("Activity Class Name：" + activity.getClass().getName());
-		ViewHelper.doIt(activity);
-
-		if(activity.getWindow() != null && activity.getWindow().getDecorView() != null
-				&& activity.getWindow().getDecorView() instanceof ViewGroup) {
-			ViewGroup viewGroup = (ViewGroup) activity.getWindow().getDecorView();
-			layoutListener.setRootView(viewGroup);
-			viewGroup.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
+		if (activity != null) {
+			interceptTaskManager.sendTask(activity);
 		}
 	}
 
