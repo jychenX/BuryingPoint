@@ -1,5 +1,7 @@
 package com.mob.auto.utils;
 
+import android.view.View;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;

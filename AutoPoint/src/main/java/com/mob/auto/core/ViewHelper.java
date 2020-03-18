@@ -90,28 +90,53 @@ public class ViewHelper {
 			if(childView != null) {
 				if (childView instanceof ViewGroup) {
 					setPoints2((ViewGroup) childView);
-				} else{
-					registeredListeners = getAllListener(childView);
-					if(registeredListeners != null && registeredListeners.size() > 0) {
-						for (Class<?> listenerClass : registeredListeners.keySet()) {
-							if (interfacesList.contains(listenerClass)) {//如果是我们需要的监听器
-								ProxyViewAllListener myListener = new ProxyViewAllListener(registeredListeners.get(listenerClass));//保存原先的监听且简历新的监听代理
-								Method method = methodMap.get(listenerClass);
-								method.setAccessible(true);
-								try {
-									method.invoke(childView, myListener);
-								} catch (Throwable e) {
-									e.printStackTrace();
-								}
-							}
-						}
+				} else {
+					commonPoint(childView);
+				}
+			}
+		}
+	}
+
+	/**
+	 * AccessibilityDelegate方式
+	 * @param viewGroup
+	 */
+	public static void setPoints3(ViewGroup viewGroup){
+		for(int i = 0; i < viewGroup.getChildCount(); i++){
+			View childView = viewGroup.getChildAt(i);
+			if(childView != null) {
+				if (childView instanceof ViewGroup) {
+					setPoints2((ViewGroup) childView);
+				} else {
+					View.AccessibilityDelegate accessibilityDelegate = childView.getAccessibilityDelegate();
+					if(accessibilityDelegate != null){
+						PointAccessibilityDelegate pointAccessibilityDelegate = new PointAccessibilityDelegate(accessibilityDelegate);
+						childView.setAccessibilityDelegate(pointAccessibilityDelegate);
 					}
 				}
 			}
 		}
 	}
 
-
+	private static void commonPoint(View childView){
+		registeredListeners = getAllListener(childView);
+		if(registeredListeners != null && registeredListeners.size() > 0) {
+			for (Class<?> listenerClass : registeredListeners.keySet()) {
+				//如果是我们需要的监听的监听器
+				if (interfacesList.contains(listenerClass)) {
+					//保存原先的监听并建立新的监听代理
+					ProxyViewAllListener myListener = new ProxyViewAllListener(registeredListeners.get(listenerClass));
+					Method method = methodMap.get(listenerClass);
+					method.setAccessible(true);
+					try {
+						method.invoke(childView, myListener);
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * 针对OnClickListener
@@ -119,9 +144,8 @@ public class ViewHelper {
 	 * @return
 	 */
 	private static View.OnClickListener getOnClickListener(View view){
-		Class<?> viewClass = null;
+		Class<?> viewClass = View.class;
 		try {
-			viewClass = Class.forName("android.view.View");
 			if(view.hasOnClickListeners()){
 				//Way1
 				Method method = viewClass.getDeclaredMethod("getListenerInfo");
