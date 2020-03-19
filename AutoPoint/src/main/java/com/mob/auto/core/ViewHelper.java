@@ -179,9 +179,8 @@ public class ViewHelper {
 	 * @return
 	 */
 	private static HashMap<Class<?>, Object> getAllListener(View view){
-		Class<?> viewClass = null;
 		try {
-			viewClass = Class.forName("android.view.View");
+			Class<?> viewClass = View.class;
 			//Way1
 			Method method = viewClass.getDeclaredMethod("getListenerInfo");
 			method.setAccessible(true);
